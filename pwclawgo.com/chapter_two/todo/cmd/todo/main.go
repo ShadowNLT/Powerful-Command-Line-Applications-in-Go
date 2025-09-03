@@ -21,8 +21,19 @@ func main() {
 	list := flag.Bool("list", false, "List all tasks")
 	complete := flag.Int("complete", 0, "Item to be marked as completed")
 
-	flag.Parse()
+	// Add some texts to the default Usage helper texts
+	flag.Usage = func() {
+		fmt.Fprintf(
+			flag.CommandLine.Output(),
+			"%s tool. Developed By BatmanNLT as a learning experiment.\n",
+			os.Args[0],
+		)
+		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2025\n")
+		fmt.Fprintln(flag.CommandLine.Output(), "Usage information:")
+		flag.PrintDefaults()
+	}
 
+	flag.Parse()
 	l := &todo.List{}
 
 	if err := l.Get(todoFileName); err != nil {
