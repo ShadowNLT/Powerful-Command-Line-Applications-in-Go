@@ -9,7 +9,8 @@ import (
 	"pwclawgo.com/chapter_two/todo"
 )
 
-const todoFileName = ".todo.json"
+// Default file name
+var todoFileName = ".todo.json"
 
 var ErrInvalidFlag = errors.New("invalid option")
 
@@ -25,7 +26,7 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(
 			flag.CommandLine.Output(),
-			"%s tool. Developed By BatmanNLT as a learning experiment.\n",
+			"%s tool. Developed By BatmanNLT as a learning experiment. Use the Environment variable \"TODO_FILENAME\" to specify a file to use to save your todos items.\n",
 			os.Args[0],
 		)
 		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2025\n")
@@ -34,6 +35,10 @@ func main() {
 	}
 
 	flag.Parse()
+	// Check if the user defined the ENV VAR for a custom file name
+	if os.Getenv("TODO_FILENAME") != "" {
+		todoFileName = os.Getenv("TODO_FILENAME")
+	}
 	l := &todo.List{}
 
 	if err := l.Get(todoFileName); err != nil {
